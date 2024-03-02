@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 interface Picture {
   index: number;
   src: string;
@@ -8,8 +10,6 @@ const pictures: Picture[] = Array.from(
   { length: 63 },
   (_: unknown, index: number) => index + 1
 ).map((index: number) => {
-  console.log("Creating pictures:", index);
-
   return {
     index: index - 1,
     src: `/images/${index - 1}.jpeg`,
@@ -18,6 +18,9 @@ const pictures: Picture[] = Array.from(
 });
 
 function HomePage() {
+  const [showCarousel, setShowCarousel] = useState<boolean>(false);
+  const [currentPicIndex, setCurrentPicIndex] = useState<number>(0);
+
   return (
     <>
       <div className="flex justify-center p-5">
@@ -25,7 +28,13 @@ function HomePage() {
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mx-5 mb-5">
         {pictures.map(({ index, src, alt }) => (
-          <div key={index}>
+          <div
+            key={index}
+            onClick={() => {
+              setCurrentPicIndex(index);
+              setShowCarousel(!showCarousel);
+            }}
+          >
             <img
               className="rounded-lg object-cover w-full h-full cursor-pointer"
               src={src}
@@ -34,6 +43,47 @@ function HomePage() {
           </div>
         ))}
       </div>
+      {showCarousel && (
+        <div
+          className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center"
+          onClick={() => setShowCarousel(!showCarousel)}
+        >
+          <div className="absolute top-0 right-0 p-5">
+            <button
+              className="text-white hover:underline"
+              onClick={() => setShowCarousel(!showCarousel)}
+            >
+              Close
+            </button>
+          </div>
+          <div className="absolute top-0 left-0 p-5 text-white">
+            {currentPicIndex + 1} / {pictures.length}
+          </div>
+          <div className="flex items-center justify-center w-5/6">
+            <img
+              className="rounded-lg cursor-pointer"
+              src={pictures[currentPicIndex].src}
+              alt={pictures[currentPicIndex].alt}
+              onClick={(e) => {
+                e.stopPropagation();
+
+                const cursonOnLeftSide = e.clientX < window.innerWidth / 2;
+                const cursoronRightSide = e.clientX > window.innerWidth / 2;
+
+                if (cursonOnLeftSide) {
+                  setCurrentPicIndex(
+                    (currentPicIndex - 1 + pictures.length) % pictures.length
+                  );
+                }
+
+                if (cursoronRightSide) {
+                  setCurrentPicIndex((currentPicIndex + 1) % pictures.length);
+                }
+              }}
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 }
