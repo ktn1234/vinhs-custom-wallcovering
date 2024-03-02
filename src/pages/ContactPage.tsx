@@ -4,7 +4,8 @@ import { MdEmail } from "react-icons/md";
 function ContactPage() {
   return (
     <div className="flex flex-col items-center justify-center m-5">
-      <h1 className="text-center">
+      <h1 className="text-xl font-bold">Contact</h1>
+      <h1 className="text-center mt-5">
         Get an estimate for your wallpaper installation
       </h1>
       <div

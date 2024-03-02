@@ -21,7 +21,7 @@ function AboutPage() {
       )}
       {!loading && (
         <div className="flex flex-col items-center m-5">
-          <h1 className="font-bold">About</h1>
+          <h1 className="text-xl font-bold">About</h1>
           <div className="my-5">
             <img
               className={`${
