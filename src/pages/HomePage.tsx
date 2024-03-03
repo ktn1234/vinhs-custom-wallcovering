@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FaCircleArrowLeft, FaCircleArrowRight } from "react-icons/fa6";
 
 interface Picture {
   index: number;
@@ -59,12 +60,12 @@ function HomePage() {
           <div className="absolute top-0 left-0 p-5 text-white">
             {currentPicIndex + 1} / {pictures.length}
           </div>
-          <div className="flex items-center justify-center w-5/6">
+          <div className="relative flex items-center justify-center w-5/6">
             <img
               className="rounded-lg cursor-pointer"
               src={pictures[currentPicIndex].src}
               alt={pictures[currentPicIndex].alt}
-              onClick={(e) => {
+              onClick={(e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
                 e.stopPropagation();
 
                 const cursonOnLeftSide = e.clientX < window.innerWidth / 2;
@@ -79,6 +80,24 @@ function HomePage() {
                 if (cursoronRightSide) {
                   setCurrentPicIndex((currentPicIndex + 1) % pictures.length);
                 }
+              }}
+            />
+            <FaCircleArrowLeft
+              className="absolute left-0 cursor-pointer ml-2 hover:text-white z-30"
+              size={"2em"}
+              onClick={(e: React.MouseEvent<SVGElement, MouseEvent>) => {
+                e.stopPropagation();
+                setCurrentPicIndex(
+                  (currentPicIndex - 1 + pictures.length) % pictures.length
+                );
+              }}
+            />
+            <FaCircleArrowRight
+              className="absolute right-0 cursor-pointer mr-2 hover:text-white z-30"
+              size={"2em"}
+              onClick={(e: React.MouseEvent<SVGElement, MouseEvent>) => {
+                e.stopPropagation();
+                setCurrentPicIndex((currentPicIndex + 1) % pictures.length);
               }}
             />
           </div>
